@@ -1,49 +1,27 @@
 // Chad Malfait
-// Sept 26, 2017
-// Program to install system packages along with their dependencies
+// Oct 2, 2017
+// Program to install / remove system packages along with their dependencies
 
 package main
 
 import (
 	"fmt"
+	"bufio"
 	"os"
+	"log"
+	"strings"
 )
 
+//map of nodes.  this holds our Graph
 type Graph struct {
 	nodes map[string]*Node
 }
 
+//a vertix/node of our graph
 type Node struct {
 	name string
 	value string
-	cntr int
 	children []*Node
-}
-
-func main() {
-	if len(os.Args) < 1 {
-		fmt.Println("Invalid Arugument count.")
-		fmt.Println("Valid input is DEPEND, INSTALL, REMOVE, LIST, END")
-		os.Exit(128)
-	}
-
-	switch os.Args[1] {
-	case "DEPEND":
-		addEdge("DEPEND")
-	case "INSTALL":
-		addNode("INSTALL")
-	case "REMOVE":
-		removeEdge("REMOVE")
-		removeNode("REMOVE")
-	case "LIST":
-		listNodes("LIST")
-	case "END":
-		fmt.Println("END")
-		os.Exit(128)
-	default:
-		fmt.Println("Invalid Arguemnt")
-		fmt.Println("Valid input is: DEPEND, INSTALL, REMOVE, LIST, END")
-	}
 }
 
 //Create a new graph
@@ -53,33 +31,46 @@ func New() *Graph {
 	return this
 }
 
-//Function to add a node to our graph
-func (this *Graph) AddNode(name string, value string) *Node {
-	node := &Node{name: name, value: value}
-	this.nodes[name] = node
-	return node
+//Process input file
+func readInput (path string) ([]string) {
+	var lines []string
+	file, err := os.Open(path)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return lines
 }
 
-//Function to add an edge to our node
-func (this *Graph) AddEdge(from, to string) {
-	fromNode := this.nodes[from]
-	toNode := this.nodes[to]
-	fromNode.children = append(fromNode.children, toNode)
-	toNode.cntr++
+func processLine (line string) {
+	fmt.Printf("%s ", line)
+	words := strings.Fields(line)
+	fmt.Printf(" :length -> %d \n", len(words))
 }
 
-//Function to remove an edge to our graph
-func removeEdge(junk string) {
-	fmt.Printf("hello %s", junk)
-}
+func main() {
+	if len(os.Args) < 1 {
+		fmt.Println("Invalid Arugument count.")
+		fmt.Println("Please pass the file name to read.")
+		os.Exit(128)
+	}
 
-//Function to remove a node to our graph
-func removeNode(junk string) {
-	fmt.Printf("hello %s", junk)
-}
+	lines := readInput(os.Args[1])
 
-//Function to list a nodes in our graph
-func listNodes(junk string) {
-	fmt.Printf("hello %s", junk)
+	for i:=0; i < len(lines); i++ {
+		processLine(lines[i])
+	}
 }
-
