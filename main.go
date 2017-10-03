@@ -55,10 +55,34 @@ func readInput (path string) ([]string) {
 	return lines
 }
 
+/*
 func processLine (line string) {
 	fmt.Printf("%s ", line)
 	words := strings.Fields(line)
 	fmt.Printf(" :length -> %d \n", len(words))
+	fmt.Printf(" :one %s \n", words[0])
+	fmt.Printf(" :one %s \n", words[1])
+}
+*/
+
+func addEdge(mystring string) {
+	fmt.Printf("AddEdge %s \n", mystring)
+}
+
+func addNode(mystring string) {
+	fmt.Printf("AddNode %s \n", mystring)
+}
+
+func removeEdge(mystring string) {
+	fmt.Printf("RemoveEdge %s \n", mystring)
+}
+
+func removeNode(mystring string) {
+	fmt.Printf("RemoveNode %s \n", mystring)
+}
+
+func listNodes(mystring string) {
+	fmt.Printf("list %s \n", mystring)
 }
 
 func main() {
@@ -71,6 +95,24 @@ func main() {
 	lines := readInput(os.Args[1])
 
 	for i:=0; i < len(lines); i++ {
-		processLine(lines[i])
+		words := strings.Fields(lines[i])
+
+		switch words[0] {
+        case "DEPEND":
+          addEdge(lines[i])
+        case "INSTALL":
+          addNode(lines[i])
+        case "REMOVE":
+          removeEdge(lines[i])
+          removeNode(lines[i])
+        case "LIST":
+          listNodes(lines[i])
+        case "END":
+          fmt.Println("END")
+          os.Exit(128)
+        default:
+          fmt.Println("Invalid Arguemnt")
+          fmt.Println("Valid input is: DEPEND, INSTALL, REMOVE, LIST, END")
+        }
 	}
 }
