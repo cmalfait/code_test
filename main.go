@@ -64,24 +64,19 @@ func processLine (line string) {
 	fmt.Printf(" :one %s \n", words[1])
 }
 */
-
-func addEdge(mystring string) {
-	fmt.Printf("AddEdge %s \n", mystring)
+func addDepend(mystring string) {
+	fmt.Printf("addDepend %s \n", mystring)
 }
 
-func addNode(mystring string) {
-	fmt.Printf("AddNode %s \n", mystring)
+func addPkg(mystring string) {
+	fmt.Printf("AddPkg %s \n", mystring)
 }
 
-func removeEdge(mystring string) {
-	fmt.Printf("RemoveEdge %s \n", mystring)
+func removePkg(mystring string) {
+	fmt.Printf("RemovePkg %s \n", mystring)
 }
 
-func removeNode(mystring string) {
-	fmt.Printf("RemoveNode %s \n", mystring)
-}
-
-func listNodes(mystring string) {
+func listPkgs(mystring string) {
 	fmt.Printf("list %s \n", mystring)
 }
 
@@ -99,14 +94,13 @@ func main() {
 
 		switch words[0] {
         case "DEPEND":
-          addEdge(lines[i])
+          addDepend(lines[i])
         case "INSTALL":
-          addNode(lines[i])
+          addPkg(lines[i])
         case "REMOVE":
-          removeEdge(lines[i])
-          removeNode(lines[i])
+          removePkg(lines[i])
         case "LIST":
-          listNodes(lines[i])
+          listPkgs(lines[i])
         case "END":
           fmt.Println("END")
           os.Exit(128)
